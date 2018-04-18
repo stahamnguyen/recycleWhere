@@ -54,14 +54,38 @@
 		EB40466D20876E3600C76223 /* RecycleWhere */ = {
 			isa = PBXGroup;
 			children = (
+				EB40468220878D0400C76223 /* Controller */,
+				EB40468120878ADF00C76223 /* View */,
+				EB40468020878AD600C76223 /* Model */,
 				EB40466E20876E3600C76223 /* AppDelegate.swift */,
-				EB40467020876E3600C76223 /* ViewController.swift */,
 				EB40467220876E3600C76223 /* Main.storyboard */,
 				EB40467520876E3800C76223 /* Assets.xcassets */,
 				EB40467720876E3800C76223 /* LaunchScreen.storyboard */,
 				EB40467A20876E3800C76223 /* Info.plist */,
 			);
 			path = RecycleWhere;
+			sourceTree = "<group>";
+		};
+		EB40468020878AD600C76223 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		EB40468120878ADF00C76223 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		EB40468220878D0400C76223 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				EB40467020876E3600C76223 /* ViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
