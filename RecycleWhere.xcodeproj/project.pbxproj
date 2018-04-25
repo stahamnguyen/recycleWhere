@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6A37708A20907D200087CE33 /* MaterialService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A37708920907D200087CE33 /* MaterialService.swift */; };
+		6A37708D209090670087CE33 /* RecycleWhere.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6A37708B209090670087CE33 /* RecycleWhere.xcdatamodeld */; };
+		6A3770DB2090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3770D92090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift */; };
+		6A3770DC2090964F0087CE33 /* RecyclingSpot+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3770DA2090964F0087CE33 /* RecyclingSpot+CoreDataProperties.swift */; };
 		EB40466F20876E3600C76223 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40466E20876E3600C76223 /* AppDelegate.swift */; };
 		EB40467120876E3600C76223 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40467020876E3600C76223 /* ViewController.swift */; };
 		EB40467420876E3600C76223 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB40467220876E3600C76223 /* Main.storyboard */; };
@@ -17,6 +20,9 @@
 
 /* Begin PBXFileReference section */
 		6A37708920907D200087CE33 /* MaterialService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialService.swift; sourceTree = "<group>"; };
+		6A37708C209090670087CE33 /* RecycleWhere.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RecycleWhere.xcdatamodel; sourceTree = "<group>"; };
+		6A3770D92090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecyclingSpot+CoreDataClass.swift"; path = "RecycleWhere/Models/RecyclingSpot+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6A3770DA2090964F0087CE33 /* RecyclingSpot+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecyclingSpot+CoreDataProperties.swift"; path = "RecycleWhere/Models/RecyclingSpot+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		EB40466B20876E3600C76223 /* RecycleWhere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecycleWhere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB40466E20876E3600C76223 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB40467020876E3600C76223 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -45,9 +51,25 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		6A37708E209090F60087CE33 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6A37708F209090FE0087CE33 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		EB40466220876E3600C76223 = {
 			isa = PBXGroup;
 			children = (
+				6A3770D92090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift */,
+				6A3770DA2090964F0087CE33 /* RecyclingSpot+CoreDataProperties.swift */,
 				EB40466D20876E3600C76223 /* RecycleWhere */,
 				EB40466C20876E3600C76223 /* Products */,
 			);
@@ -64,39 +86,26 @@
 		EB40466D20876E3600C76223 /* RecycleWhere */ = {
 			isa = PBXGroup;
 			children = (
+				6A37708F209090FE0087CE33 /* Views */,
+				6A37708E209090F60087CE33 /* Models */,
 				6A37708620907CC60087CE33 /* Services */,
-				EB40468220878D0400C76223 /* Controller */,
-				EB40468120878ADF00C76223 /* View */,
-				EB40468020878AD600C76223 /* Model */,
+				EB40468220878D0400C76223 /* Controllers */,
 				EB40466E20876E3600C76223 /* AppDelegate.swift */,
 				EB40467220876E3600C76223 /* Main.storyboard */,
 				EB40467520876E3800C76223 /* Assets.xcassets */,
 				EB40467720876E3800C76223 /* LaunchScreen.storyboard */,
 				EB40467A20876E3800C76223 /* Info.plist */,
+				6A37708B209090670087CE33 /* RecycleWhere.xcdatamodeld */,
 			);
 			path = RecycleWhere;
 			sourceTree = "<group>";
 		};
-		EB40468020878AD600C76223 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		EB40468120878ADF00C76223 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		EB40468220878D0400C76223 /* Controller */ = {
+		EB40468220878D0400C76223 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				EB40467020876E3600C76223 /* ViewController.swift */,
 			);
-			path = Controller;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -170,9 +179,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A3770DC2090964F0087CE33 /* RecyclingSpot+CoreDataProperties.swift in Sources */,
 				6A37708A20907D200087CE33 /* MaterialService.swift in Sources */,
 				EB40467120876E3600C76223 /* ViewController.swift in Sources */,
 				EB40466F20876E3600C76223 /* AppDelegate.swift in Sources */,
+				6A3770DB2090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift in Sources */,
+				6A37708D209090670087CE33 /* RecycleWhere.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +382,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		6A37708B209090670087CE33 /* RecycleWhere.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6A37708C209090670087CE33 /* RecycleWhere.xcdatamodel */,
+			);
+			currentVersion = 6A37708C209090670087CE33 /* RecycleWhere.xcdatamodel */;
+			path = RecycleWhere.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = EB40466320876E3600C76223 /* Project object */;
 }
