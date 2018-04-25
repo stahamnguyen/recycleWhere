@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A37708A20907D200087CE33 /* MaterialService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A37708920907D200087CE33 /* MaterialService.swift */; };
 		EB40466F20876E3600C76223 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40466E20876E3600C76223 /* AppDelegate.swift */; };
 		EB40467120876E3600C76223 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40467020876E3600C76223 /* ViewController.swift */; };
 		EB40467420876E3600C76223 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB40467220876E3600C76223 /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6A37708920907D200087CE33 /* MaterialService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialService.swift; sourceTree = "<group>"; };
 		EB40466B20876E3600C76223 /* RecycleWhere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecycleWhere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB40466E20876E3600C76223 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB40467020876E3600C76223 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -35,6 +37,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A37708620907CC60087CE33 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				6A37708920907D200087CE33 /* MaterialService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		EB40466220876E3600C76223 = {
 			isa = PBXGroup;
 			children = (
@@ -54,6 +64,7 @@
 		EB40466D20876E3600C76223 /* RecycleWhere */ = {
 			isa = PBXGroup;
 			children = (
+				6A37708620907CC60087CE33 /* Services */,
 				EB40468220878D0400C76223 /* Controller */,
 				EB40468120878ADF00C76223 /* View */,
 				EB40468020878AD600C76223 /* Model */,
@@ -159,6 +170,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A37708A20907D200087CE33 /* MaterialService.swift in Sources */,
 				EB40467120876E3600C76223 /* ViewController.swift in Sources */,
 				EB40466F20876E3600C76223 /* AppDelegate.swift in Sources */,
 			);

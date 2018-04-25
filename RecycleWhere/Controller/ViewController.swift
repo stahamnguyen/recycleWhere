@@ -10,8 +10,21 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let materialService = MaterialService()
+    
+    let userDefaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        materialService.getCategories()
+        
+        guard let categories = userDefaults.object(forKey: "materials") as? [String] else {
+            fatalError("Type cast error fetching categories from user defaults")
+        }
+        
+        print(categories)
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
 
