@@ -21,5 +21,6 @@ extension RecyclingSpot {
     @NSManaged public var lng: String?
     @NSManaged public var material_id: String?
     @NSManaged public var name: String?
+    @NSManaged public var spot_id: String?
 
 }

@@ -3,8 +3,12 @@
 //  RecycleWhere
 //
 //  Created by iosdev on 25.04.18.
-//  Copyright © 2018 Staham Nguyen. All rights reserved.
+//  Copyright © 2018 Erkki Halinen. All rights reserved.
 //
+
+/* Notes:
+    Service class for fetching category names of the ML image recognition
+*/
 
 import Foundation
 

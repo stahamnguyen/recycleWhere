@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A0939292090AD3400EB02F4 /* RecyclingSpotService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0939282090AD3400EB02F4 /* RecyclingSpotService.swift */; };
 		6A37708A20907D200087CE33 /* MaterialService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A37708920907D200087CE33 /* MaterialService.swift */; };
 		6A37708D209090670087CE33 /* RecycleWhere.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6A37708B209090670087CE33 /* RecycleWhere.xcdatamodeld */; };
 		6A3770DB2090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3770D92090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6A0939282090AD3400EB02F4 /* RecyclingSpotService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecyclingSpotService.swift; sourceTree = "<group>"; };
 		6A37708920907D200087CE33 /* MaterialService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialService.swift; sourceTree = "<group>"; };
 		6A37708C209090670087CE33 /* RecycleWhere.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RecycleWhere.xcdatamodel; sourceTree = "<group>"; };
 		6A3770D92090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecyclingSpot+CoreDataClass.swift"; path = "RecycleWhere/Models/RecyclingSpot+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -47,6 +49,7 @@
 			isa = PBXGroup;
 			children = (
 				6A37708920907D200087CE33 /* MaterialService.swift */,
+				6A0939282090AD3400EB02F4 /* RecyclingSpotService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -179,6 +182,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A0939292090AD3400EB02F4 /* RecyclingSpotService.swift in Sources */,
 				6A3770DC2090964F0087CE33 /* RecyclingSpot+CoreDataProperties.swift in Sources */,
 				6A37708A20907D200087CE33 /* MaterialService.swift in Sources */,
 				EB40467120876E3600C76223 /* ViewController.swift in Sources */,

@@ -5,8 +5,9 @@
         <attribute name="lng" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="material_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="spot_id" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="RecyclingSpot" positionX="-63" positionY="-18" width="128" height="105"/>
+        <element name="RecyclingSpot" positionX="-63" positionY="-18" width="128" height="120"/>
     </elements>
 </model>
