@@ -103,23 +103,24 @@ class MainVC: UIViewController, XMLParserDelegate, UIImagePickerControllerDelega
     func choosePhotoFromLibrary() {
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .photoLibrary
+        imagePicker.modalPresentationStyle = .fullScreen
         imagePicker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
         present(imagePicker, animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let chosenImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            let squareChosenImage = chosenImage.scaleImageToSize(size: CGSize(width: 300, height: 300))
             dismiss(animated: true, completion: {
-                self.navigateToCategoryVC(with: chosenImage)
+                self.navigateToCategoryVC(with: squareChosenImage)
             })
         }
     }
     
     func takePhoto() {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            imagePicker.allowsEditing = false
+            imagePicker.allowsEditing = true
             imagePicker.sourceType = .camera
-            imagePicker.cameraCaptureMode = .photo
             imagePicker.modalPresentationStyle = .fullScreen
             present(imagePicker, animated: true, completion: nil)
         } else {

@@ -39,10 +39,22 @@ class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     }
     
     func setupImageView() {
-        self.imageView.frame = CGRect(x: SCREEN_WIDTH / 2 - 150, y: SCREEN_HEIGHT / 2 - 250, width: 300, height: 300)
         self.imageView.contentMode = .scaleAspectFit
         
         view.addSubview(self.imageView)
+        
+        let distanceToScreenHeight = (SCREEN_WIDTH - 300) / 2
+        
+        self.imageView.translatesAutoresizingMaskIntoConstraints = false;
+        let views = ["imageView": self.imageView]
+        self.imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        let verticalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "V:|-(100)-[imageView]", options: .alignAllCenterX, metrics: nil, views: views)
+        let horizontalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(\(distanceToScreenHeight))-[imageView]-(\(distanceToScreenHeight))-|", options: .alignAllCenterX, metrics: nil, views: views)
+        let widthConstraint = NSLayoutConstraint(item: self.imageView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 300)
+        let heightConstraint = NSLayoutConstraint(item: self.imageView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 300)
+        NSLayoutConstraint.activate(verticalConstraint)
+        NSLayoutConstraint.activate(horizontalConstraint)
+        NSLayoutConstraint.activate([widthConstraint, heightConstraint])
     }
     
     func setupPickerView() {
