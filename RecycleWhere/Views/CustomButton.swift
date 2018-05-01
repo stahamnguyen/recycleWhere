@@ -17,12 +17,19 @@ class CustomButton: UIButton {
         super.init(frame: frame)
     }
     
-    convenience init(size: CGSize, title: String, tintColor: UIColor, fontSize: CGFloat) {
+    convenience init(size: CGSize, title: String?, tintColor: UIColor?, fontSize: CGFloat?) {
         self.init(type: .system)
         self.size = size
-        self.setTitle(title, for: .normal)
-        self.tintColor = tintColor
-        self.titleLabel?.font = UIFont.systemFont(ofSize: fontSize)
+       
+        if let tintColor = tintColor {
+             self.tintColor = tintColor
+        }
+        
+        if let title = title, let fontSize = fontSize {
+            self.titleLabel?.font = UIFont.systemFont(ofSize: fontSize)
+            self.setTitle(title, for: .normal)
+        }
+        
         
     }
     

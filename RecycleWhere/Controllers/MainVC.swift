@@ -58,6 +58,7 @@ class MainVC: UIViewController, XMLParserDelegate, UIImagePickerControllerDelega
     
     func createLogo() {
         self.logo = UIImageView(image: UIImage(named: "logo"))
+        self.logo?.tintColor = SAFFRON
         self.logo?.contentMode = .scaleAspectFit
         self.logo?.frame = CGRect(x: SCREEN_WIDTH / 2 - 100, y: SCREEN_HEIGHT / 2 - 200, width: 200, height: 200)
         
