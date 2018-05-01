@@ -29,7 +29,8 @@ class RecyclingSpotService {
         let task = URLSession.shared.dataTask(with: requestUrl as URL) { (data, response, error) in
             
             guard let data = data else {
-                fatalError("Error processing data from server")
+                print("Error processing data from server")
+                return
             }
             serverResponse = data
         }

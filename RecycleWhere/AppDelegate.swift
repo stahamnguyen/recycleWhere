@@ -16,7 +16,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let viewContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        UINavigationBar.appearance().tintColor = WHITE
+        application.statusBarStyle = .lightContent
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        
+        let mainScreenController = MainVC()
+        
+        window?.rootViewController = UINavigationController(rootViewController: mainScreenController)
+        
         return true
     }
 

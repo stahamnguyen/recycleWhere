@@ -12,8 +12,12 @@
 		6A37708D209090670087CE33 /* RecycleWhere.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6A37708B209090670087CE33 /* RecycleWhere.xcdatamodeld */; };
 		6A3770DB2090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3770D92090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift */; };
 		6A3770DC2090964F0087CE33 /* RecyclingSpot+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3770DA2090964F0087CE33 /* RecyclingSpot+CoreDataProperties.swift */; };
+		EB2F61F720976BB5006051E9 /* RadialGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F61F620976BB5006051E9 /* RadialGradientView.swift */; };
+		EB2F61F920976D36006051E9 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F61F820976D36006051E9 /* Constant.swift */; };
+		EB2F62002097D9B9006051E9 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F61FF2097D9B9006051E9 /* CustomButton.swift */; };
+		EB2F62022097E748006051E9 /* CategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F62012097E748006051E9 /* CategoryVC.swift */; };
 		EB40466F20876E3600C76223 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40466E20876E3600C76223 /* AppDelegate.swift */; };
-		EB40467120876E3600C76223 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40467020876E3600C76223 /* ViewController.swift */; };
+		EB40467120876E3600C76223 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40467020876E3600C76223 /* MainVC.swift */; };
 		EB40467420876E3600C76223 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB40467220876E3600C76223 /* Main.storyboard */; };
 		EB40467620876E3800C76223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB40467520876E3800C76223 /* Assets.xcassets */; };
 		EB40467920876E3800C76223 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB40467720876E3800C76223 /* LaunchScreen.storyboard */; };
@@ -25,9 +29,13 @@
 		6A37708C209090670087CE33 /* RecycleWhere.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RecycleWhere.xcdatamodel; sourceTree = "<group>"; };
 		6A3770D92090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecyclingSpot+CoreDataClass.swift"; path = "RecycleWhere/Models/RecyclingSpot+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6A3770DA2090964F0087CE33 /* RecyclingSpot+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecyclingSpot+CoreDataProperties.swift"; path = "RecycleWhere/Models/RecyclingSpot+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		EB2F61F620976BB5006051E9 /* RadialGradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadialGradientView.swift; sourceTree = "<group>"; };
+		EB2F61F820976D36006051E9 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		EB2F61FF2097D9B9006051E9 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		EB2F62012097E748006051E9 /* CategoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryVC.swift; sourceTree = "<group>"; };
 		EB40466B20876E3600C76223 /* RecycleWhere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecycleWhere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB40466E20876E3600C76223 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		EB40467020876E3600C76223 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		EB40467020876E3600C76223 /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		EB40467320876E3600C76223 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EB40467520876E3800C76223 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EB40467820876E3800C76223 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -64,6 +72,9 @@
 		6A37708F209090FE0087CE33 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EB2F61F820976D36006051E9 /* Constant.swift */,
+				EB2F61F620976BB5006051E9 /* RadialGradientView.swift */,
+				EB2F61FF2097D9B9006051E9 /* CustomButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -106,7 +117,8 @@
 		EB40468220878D0400C76223 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				EB40467020876E3600C76223 /* ViewController.swift */,
+				EB40467020876E3600C76223 /* MainVC.swift */,
+				EB2F62012097E748006051E9 /* CategoryVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -184,9 +196,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A0939292090AD3400EB02F4 /* RecyclingSpotService.swift in Sources */,
+				EB2F61F720976BB5006051E9 /* RadialGradientView.swift in Sources */,
+				EB2F61F920976D36006051E9 /* Constant.swift in Sources */,
 				6A3770DC2090964F0087CE33 /* RecyclingSpot+CoreDataProperties.swift in Sources */,
 				6A37708A20907D200087CE33 /* MaterialService.swift in Sources */,
-				EB40467120876E3600C76223 /* ViewController.swift in Sources */,
+				EB2F62022097E748006051E9 /* CategoryVC.swift in Sources */,
+				EB40467120876E3600C76223 /* MainVC.swift in Sources */,
+				EB2F62002097D9B9006051E9 /* CustomButton.swift in Sources */,
 				EB40466F20876E3600C76223 /* AppDelegate.swift in Sources */,
 				6A3770DB2090964F0087CE33 /* RecyclingSpot+CoreDataClass.swift in Sources */,
 				6A37708D209090670087CE33 /* RecycleWhere.xcdatamodeld in Sources */,
