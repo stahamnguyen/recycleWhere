@@ -25,6 +25,8 @@ class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         setupPickerView()
     }
     
+    // MARK: UI methods
+    
     func createBackground() {
         let bg = RadialGradientView()
         bg.insideColor = LIGHT_BLUE
