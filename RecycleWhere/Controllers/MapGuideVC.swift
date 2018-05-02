@@ -37,12 +37,6 @@ class MapGuideVC: UIViewController {
         NSLayoutConstraint.activate(horizontalConstraint)
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        navigationController?.navigationBar.backIndicatorImage = UIImage(named: "logo")
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "logo")
-        print("Did")
-    }
-    
 
     /*
     // MARK: - Navigation
