@@ -9,11 +9,20 @@
 import UIKit
 import Foundation
 
-class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UINavigationControllerDelegate {
     
     var imageView = UIImageView()
     var categoryPickerView = UIPickerView()
-    var button: CustomButton?
+    var button: CustomButton = CustomButton(size: CGSize(width: 60, height: 50), title: nil, tintColor: WHITE, fontSize: nil)
+    
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        viewController.viewWillAppear(animated)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.backIndicatorImage = UIImage(named: "back")
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "back")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +34,7 @@ class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         setupImageView()
         setupPickerView()
         createButton()
+        addHandlerForButton()
     }
     
     // MARK: UI methods
@@ -70,24 +80,36 @@ class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     }
     
     func createButton() {
-        self.button = CustomButton(size: CGSize(width: 60, height: 50), title: "hello", tintColor: WHITE, fontSize: 30)
-        self.button?.setImage(UIImage(named: "logo"), for: .normal)
-        self.button?.imageView?.contentMode = .scaleAspectFit
+        self.button.setImage(UIImage(named: "logo"), for: .normal)
+        self.button.imageView?.contentMode = .scaleAspectFit
         
-        view.addSubview(self.button!)
+        view.addSubview(self.button)
         
         let distanceToScreenHeight = SCREEN_WIDTH / 2 - 25
         
-        self.button?.translatesAutoresizingMaskIntoConstraints = false;
-        let views = ["pickerView": self.categoryPickerView, "button": self.button!]
-        self.button?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        self.button.translatesAutoresizingMaskIntoConstraints = false;
+        let views = ["pickerView": self.categoryPickerView, "button": self.button]
+        self.button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         let verticalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "V:[pickerView]-(>=20)-[button]-(20)-|", options: .alignAllCenterX, metrics: nil, views: views)
         let horizontalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(\(distanceToScreenHeight))-[button]-(\(distanceToScreenHeight))-|", options: .alignAllCenterX, metrics: nil, views: views)
-        let widthConstraint = NSLayoutConstraint(item: self.button!, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 50)
-        let heightConstraint = NSLayoutConstraint(item: self.button!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 50)
+        let widthConstraint = NSLayoutConstraint(item: self.button, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 50)
+        let heightConstraint = NSLayoutConstraint(item: self.button, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 50)
         NSLayoutConstraint.activate(verticalConstraint)
         NSLayoutConstraint.activate(horizontalConstraint)
         NSLayoutConstraint.activate([widthConstraint, heightConstraint])
+    }
+    
+    // MARK: Add handler for button
+    
+    func addHandlerForButton() {
+        self.button.addTarget(self, action: #selector(self.navigateToMapVC), for: .touchUpInside)
+    }
+    
+    @objc func navigateToMapVC() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        
+        let mapVC = MapGuideVC()
+        navigationController?.pushViewController(mapVC, animated: true)
     }
     
     // MARK: Picker View

@@ -36,4 +36,12 @@ class CustomButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func setDropShadow() {
+        self.layer.masksToBounds = false;
+        self.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
+        self.layer.shadowRadius = 10
+        self.layer.shadowOpacity = 1.0
+        self.layer.shadowColor = BLACK.cgColor
+    }
 }
