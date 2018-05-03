@@ -26,6 +26,7 @@ class RecyclingSpotService {
         
         var serverResponse: Data?
         
+        //Async task begins here
         let task = URLSession.shared.dataTask(with: requestUrl as URL) { (data, response, error) in
             
             guard let data = data else {

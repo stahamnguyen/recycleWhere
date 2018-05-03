@@ -3,7 +3,7 @@
 //  RecycleWhere
 //
 //  Created by Staham Nguyen on 01/05/2018.
-//  Copyright © 2018 RecycleWhere. All rights reserved.
+//  Copyright © 2018 Erkki Halinen & Staham Nguyen RecycleWhere. All rights reserved.
 //
 
 import UIKit
@@ -14,6 +14,12 @@ class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     var imageView = UIImageView()
     var categoryPickerView = UIPickerView()
     var button: CustomButton = CustomButton(size: CGSize(width: 60, height: 50), title: nil, tintColor: WHITE, fontSize: nil)
+    
+    //Category datasource
+    var materialService = MaterialService()
+    var defaults = UserDefaults.standard
+    
+    var categories: [String] = []
     
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         viewController.viewWillAppear(animated)
@@ -35,6 +41,16 @@ class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         setupPickerView()
         createButton()
         addHandlerForButton()
+        
+        //Fetching categories from user defaults or from server
+        materialService.getCategories()
+        
+        guard let materialCategories = defaults.object(forKey: "materials") as? [String] else {
+            print("Type cast error fetching categories from user defaults")
+            return
+        }
+        
+        categories = materialCategories
     }
     
     // MARK: UI methods
@@ -119,12 +135,12 @@ class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 9 // Put fetched data here
+        return categories.count
     }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         
-        let titleData = "Test" // Put fetched data here
+        let titleData = categories[row]
         
         let styledTitle = NSAttributedString(string: titleData, attributes: [NSAttributedStringKey.font: UIFont(name: "Georgia", size: 15.0)!, NSAttributedStringKey.foregroundColor: WHITE])
         return styledTitle
