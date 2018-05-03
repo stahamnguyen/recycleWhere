@@ -11,7 +11,8 @@ import UIKit
 class MainVC: UIViewController, XMLParserDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var logo: UIImageView?
-    var button: CustomButton?
+    var identifyButton: CustomButton?
+    var recyclingBasketButton: CustomButton?
     
     let imagePicker = UIImagePickerController()
     
@@ -20,12 +21,12 @@ class MainVC: UIViewController, XMLParserDelegate, UIImagePickerControllerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        imagePicker.delegate = self
-        
         createBackground()
         createLogo()
-        createButton()
-        addHandlerForButton()
+        createIdentifyButton()
+        addHandlerForIdentifyButton()
+        createRecyclingBasketButton()
+        addHandlerForRecyclingBasketButton()
         
     }
 
@@ -37,9 +38,8 @@ class MainVC: UIViewController, XMLParserDelegate, UIImagePickerControllerDelega
     // MARK: UI methods
     
     func createBackground() {
-        let bg = RadialGradientView()
-        bg.insideColor = LIGHT_BLUE
-        bg.outsideColor = DARK_BLUE
+        let bg = UIView()
+        bg.backgroundColor = LIGHT_BLUE
         bg.frame = UIScreen.main.bounds
         
         view.addSubview(bg)
@@ -54,21 +54,36 @@ class MainVC: UIViewController, XMLParserDelegate, UIImagePickerControllerDelega
         view.addSubview(self.logo!)
     }
     
-    func createButton() {
-        self.button = CustomButton(size: CGSize(width: 200, height: 50), title: "Press to Identify", tintColor: WHITE, fontSize: 30)
-        view.addSubview(self.button!)
+    func createIdentifyButton() {
+        self.identifyButton = CustomButton(size: CGSize(width: 200, height: 50), title: "Press to Identify", tintColor: WHITE, fontSize: 30)
+        view.addSubview(self.identifyButton!)
         
-        self.button?.translatesAutoresizingMaskIntoConstraints = false;
-        let views = ["logo": self.logo!, "button": self.button!]
-        self.button?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        self.identifyButton?.translatesAutoresizingMaskIntoConstraints = false;
+        let views = ["logo": self.logo!, "button": self.identifyButton!]
+        self.identifyButton?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         let verticalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "V:[logo]-(50)-[button]", options: .alignAllCenterX, metrics: nil, views: views)
+        NSLayoutConstraint.activate(verticalConstraint)
+    }
+    
+    func createRecyclingBasketButton() {
+        self.recyclingBasketButton = CustomButton(size: CGSize(width: 200, height: 50), title: "Recycling Basket", tintColor: WHITE, fontSize: 30)
+        view.addSubview(self.recyclingBasketButton!)
+        
+        self.recyclingBasketButton?.translatesAutoresizingMaskIntoConstraints = false;
+        let views = ["recyclingBut": self.recyclingBasketButton!, "identifyBut": self.identifyButton!]
+        self.recyclingBasketButton?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        let verticalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "V:[identifyBut]-(30)-[recyclingBut]", options: .alignAllCenterX, metrics: nil, views: views)
         NSLayoutConstraint.activate(verticalConstraint)
     }
     
     // MARK: Add handler for button
     
-    func addHandlerForButton() {
-        self.button?.addTarget(self, action: #selector(self.chooseImage), for: .touchUpInside)
+    func addHandlerForIdentifyButton() {
+        self.identifyButton?.addTarget(self, action: #selector(self.chooseImage), for: .touchUpInside)
+    }
+    
+    func addHandlerForRecyclingBasketButton() {
+        self.recyclingBasketButton?.addTarget(self, action: #selector(self.navigateToRecyclingBasketVC), for: .touchUpInside)
     }
     
     @objc func chooseImage() {
@@ -87,11 +102,17 @@ class MainVC: UIViewController, XMLParserDelegate, UIImagePickerControllerDelega
         present(actionSheet, animated: true, completion: nil)
     }
     
+    @objc func navigateToRecyclingBasketVC() {
+        let recyclingBasketVC = RecyclingBasketVC()
+        navigationController?.pushViewController(recyclingBasketVC, animated: true)
+    }
+    
     // MARK: ImagePicker
     
     func choosePhotoFromLibrary() {
+        imagePicker.delegate = self
         imagePicker.allowsEditing = false
-        imagePicker.sourceType = .photoLibrary
+        imagePicker.sourceType = .savedPhotosAlbum
         imagePicker.modalPresentationStyle = .fullScreen
         imagePicker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
         present(imagePicker, animated: true, completion: nil)
@@ -109,8 +130,10 @@ class MainVC: UIViewController, XMLParserDelegate, UIImagePickerControllerDelega
     
     func takePhoto() {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            imagePicker.delegate = self
             imagePicker.allowsEditing = true
             imagePicker.sourceType = .camera
+            imagePicker.cameraCaptureMode = .photo
             imagePicker.modalPresentationStyle = .fullScreen
             present(imagePicker, animated: true, completion: nil)
         } else {

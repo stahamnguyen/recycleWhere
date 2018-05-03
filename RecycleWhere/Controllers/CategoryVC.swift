@@ -56,9 +56,8 @@ class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     // MARK: UI methods
     
     func createBackground() {
-        let bg = RadialGradientView()
-        bg.insideColor = LIGHT_BLUE
-        bg.outsideColor = DARK_BLUE
+        let bg = UIView()
+        bg.backgroundColor = LIGHT_BLUE
         bg.frame = UIScreen.main.bounds
         
         view.addSubview(bg)
