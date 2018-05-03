@@ -13,8 +13,6 @@ class ViewController: UIViewController {
         let initialLocation = CLLocation(latitude: 21.282778, longitude: -157.829444)
         centerMapOnLocation(location: initialLocation)
         mapView.delegate = self
-        //    let points = Points(title: "Metropolia", locationName: "Espoo", discipline: "Sculpture", coordinate: CLLocationCoordinate2D(latitude: 21.283921, longitude: -157.831661))
-        //    mapView.addAnnotation(points)
         //parsing json file
         loadInitialData()
         //add all points

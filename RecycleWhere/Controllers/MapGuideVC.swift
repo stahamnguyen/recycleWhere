@@ -110,10 +110,10 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
                 recyclingSpot.spot_id = attribute.value
                 break
             case "lat" :
-                recyclingSpot.lat = attribute.value
+                recyclingSpot.lat = Float(attribute.value)!
                 break
             case "lng" :
-                recyclingSpot.lng = attribute.value
+                recyclingSpot.lng = Float(attribute.value)!
                 break
             case "nimi" :
                 recyclingSpot.name = attribute.value

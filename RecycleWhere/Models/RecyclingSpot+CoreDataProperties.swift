@@ -2,8 +2,8 @@
 //  RecyclingSpot+CoreDataProperties.swift
 //  RecycleWhere
 //
-//  Created by iosdev on 25.04.18.
-//  Copyright © 2018 Staham Nguyen. All rights reserved.
+//  Created by iosdev on 03.05.18.
+//  Copyright © 2018 RecycleWhere. All rights reserved.
 //
 //
 
@@ -17,8 +17,8 @@ extension RecyclingSpot {
         return NSFetchRequest<RecyclingSpot>(entityName: "RecyclingSpot")
     }
 
-    @NSManaged public var lat: String?
-    @NSManaged public var lng: String?
+    @NSManaged public var lat: Float
+    @NSManaged public var lng: Float
     @NSManaged public var material_id: String?
     @NSManaged public var name: String?
     @NSManaged public var spot_id: String?
