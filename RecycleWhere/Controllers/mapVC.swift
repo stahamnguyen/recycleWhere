@@ -47,7 +47,7 @@ class ViewController: UIViewController {
             let works = dictionary["data"] as? [[Any]]
             else { return }
         // 5
-        let validWorks = works.flatMap { Points(json: $0) }
+        let validWorks = works.compactMap { Points(json: $0) }
         recpoints.append(contentsOf: validWorks)
     }
     let regionRadius: CLLocationDistance = 500

@@ -15,7 +15,7 @@ import Foundation
 class MaterialService {
     
     //Base URL for the back-end, modify when building end product with actual server IP
-    let baseurl = "http://localhost:3000"
+    let baseurl = "http://10.114.32.29"
     
     //User defaults instance
     let userDefaults = UserDefaults.standard
@@ -52,8 +52,14 @@ class MaterialService {
                     
                     let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [String: Any];
                     
-                    guard let materials = json?["categories"] as? [String] else {
+                    guard let materialsArr = json?["categories"] as? [String] else {
                         fatalError("Couldn't get the categories from the server !")
+                    }
+                    
+                    //Create a new dictionary and insert all of the categories as keys
+                    var materials = [String: Int]()
+                    for catgry in materialsArr {
+                        materials[catgry] = 0
                     }
                     
                     //Store materials array into UserDefaults
