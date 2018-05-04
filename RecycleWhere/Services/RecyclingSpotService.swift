@@ -17,6 +17,7 @@ import Foundation
 class RecyclingSpotService {
     
     let APIBaseUrl = "http://kierratys.info/2.0/genxml.php"
+    let searchRadius = 4
     
     // MARK: Public methods
     //Fetches the nearest recycling spots. Server returns XML data
@@ -47,6 +48,7 @@ class RecyclingSpotService {
         var url:String = APIBaseUrl
         url.append("?lat=" + String(lat))
         url.append("&lng=" + String(lng))
+        url.append("&radius=" + String(searchRadius))
         
         print(url)
         
