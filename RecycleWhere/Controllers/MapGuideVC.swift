@@ -27,6 +27,12 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
         //After that utilize the xml parsing functions with the Data received from API
         
         setupMapView()
+        
+        let recyclingSpots = RecyclingSpotService()
+        
+        let dataFromApi = recyclingSpots.fetchRecyclingSpots(20.006, 304.05)
+        
+        parseServerXmlResponse(apiData: dataFromApi)
     }
     
     func setupMapView() {
@@ -120,6 +126,12 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
                 break
             case "laji_id" :
                 recyclingSpot.material_id = attribute.value
+                break
+            case "aukiolo" :
+                recyclingSpot.openingHours = attribute.value
+                break
+            case "yhteys" :
+                recyclingSpot.contactInfo = attribute.value
                 break
                 
             default:

@@ -2,7 +2,7 @@
 //  RecyclingSpot+CoreDataProperties.swift
 //  RecycleWhere
 //
-//  Created by iosdev on 03.05.18.
+//  Created by iosdev on 04.05.18.
 //  Copyright © 2018 RecycleWhere. All rights reserved.
 //
 //
@@ -22,5 +22,7 @@ extension RecyclingSpot {
     @NSManaged public var material_id: String?
     @NSManaged public var name: String?
     @NSManaged public var spot_id: String?
+    @NSManaged public var openingHours: String?
+    @NSManaged public var contactInfo: String?
 
 }
