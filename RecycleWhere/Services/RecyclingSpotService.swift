@@ -21,29 +21,28 @@ class RecyclingSpotService {
     
     // MARK: Public methods
     //Fetches the nearest recycling spots. Server returns XML data
-    func fetchRecyclingSpots(_ userLatitude: Float, _ userLongitude: Float) -> Data {
-        
-        let requestUrl:NSURL = self.constructRequestNSURL(userLatitude, userLongitude)
-        
-        var serverResponse: Data?
-        
-        //Async task begins here
-        let task = URLSession.shared.dataTask(with: requestUrl as URL) { (data, response, error) in
+    func fetchRecyclingSpots(userLatitude: Double, userLongitude: Double, completionHandler: @escaping (Data) -> ()) {
+        DispatchQueue.global(qos:.userInteractive).async {
+            let requestUrl:NSURL = self.constructRequestNSURL(userLatitude, userLongitude)
             
-            guard let data = data else {
-                print("Error processing data from server")
-                return
+            //Async task begins here
+            let task = URLSession.shared.dataTask(with: requestUrl as URL) { (data, response, error) in
+                
+                guard let data = data else {
+                    print("Error processing data from server")
+                    return
+                }
+                DispatchQueue.main.async {
+                    completionHandler(data)
+                }
             }
-            serverResponse = data
+            task.resume()
         }
-        task.resume()
-        
-        return (serverResponse ?? nil)!
     }
     
     // MARK: Private methods
     //Constructs the request URL when given latitude and longitude of the user
-    private func constructRequestNSURL(_ lat: Float,_ lng: Float) -> NSURL{
+    private func constructRequestNSURL(_ lat: Double,_ lng: Double) -> NSURL{
         
         var url:String = APIBaseUrl
         url.append("?lat=" + String(lat))

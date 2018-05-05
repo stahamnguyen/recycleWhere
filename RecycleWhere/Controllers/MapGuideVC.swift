@@ -30,10 +30,8 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
         createCurrentLocationButton()
         
         let recyclingSpots = RecyclingSpotService()
-        
-        let dataFromApi = recyclingSpots.fetchRecyclingSpots(20.006, 304.05)
-        
-        parseServerXmlResponse(apiData: dataFromApi)
+
+        recyclingSpots.fetchRecyclingSpots(userLatitude: 20.006, userLongitude: 304.05, completionHandler: parseServerXmlResponse(apiData:))
     }
     
     func setupMapView() {
