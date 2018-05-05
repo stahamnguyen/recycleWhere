@@ -20,11 +20,11 @@ class RecyclingBasketCell: UITableViewCell {
     
     func setupSubviewsBasedOnCategory(name: String) {
         
-        let views = ["imageView": imageViewOfCategory, "categoryTitle": titleOfCategory, "numberOfItemLabel": numberOfItemLabel]
+        let views = ["imageView": imageViewOfCategory, "categoryTitle": titleOfCategory, "numberOfItemLabel": numberOfItemLabel] as [String : Any]
         
-        setupImageViewOf(category: name, views: views)
-        setupTitleOf(category: name, views: views)
-        setupNumberOfItemLabelOf(category: name, views: views)
+        setupImageViewOf(category: name, views: views as! [String : UIView])
+        setupTitleOf(category: name, views: views as! [String : UIView])
+        setupNumberOfItemLabelOf(category: name, views: views as! [String : UIView])
     }
     
     func setupImageViewOf(category name: String, views: [String : UIView]) {

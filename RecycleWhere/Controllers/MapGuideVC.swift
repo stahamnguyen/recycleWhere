@@ -8,13 +8,16 @@
 
 import UIKit
 import MapKit
+import CoreData
 
-class MapGuideVC: UIViewController, XMLParserDelegate {
+class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControllerDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
     
     let mapView = MKMapView()
-    
+    var controller = NSFetchedResultsController<RecyclingSpot>()
     var previousViewController: UIViewController?
-    
+    var initlocation: CLLocation?
+    let locationManager = CLLocationManager()
+    var recpoints: [Points] = []
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "backShadow")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "backShadow")
@@ -30,9 +33,17 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
         
         let recyclingSpots = RecyclingSpotService()
         
-        let dataFromApi = recyclingSpots.fetchRecyclingSpots(20.006, 304.05)
+        let dataFromApi = recyclingSpots.fetchRecyclingSpots(60.2208903, 24.8027918)
         
         parseServerXmlResponse(apiData: dataFromApi)
+        
+        fetchRecyclingSpotFromCoreData()
+        
+        initlocation = CLLocation(latitude: 60.2208903, longitude: 24.8027918)
+        
+        centerMapOnLocation(location: initlocation!)
+        
+        mapView.addAnnotations(recpoints)
     }
     
     func setupMapView() {
@@ -45,8 +56,43 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
         NSLayoutConstraint.activate(verticalConstraint)
         NSLayoutConstraint.activate(horizontalConstraint)
     }
+    //
+    //fetch recycling spot
+    func fetchRecyclingSpotFromCoreData() {
+        let fetchRequest: NSFetchRequest<RecyclingSpot> = RecyclingSpot.fetchRequest()
+        let descriptor = NSSortDescriptor(key:"name", ascending: true)
+        fetchRequest.sortDescriptors = [descriptor]
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        self.controller = controller
+        self.controller.delegate = self
+        do {
+            try self.controller.performFetch()
+        } catch {
+            let error = error as NSError
+            print("\(error)")
+        }
+        let data = self.controller.fetchedObjects
+        for miniData in data! {
+            recpoints.append(Points(data: miniData)!)
+        }
+    }
     
-
+    func checkLocationAuthorizationStatus() {
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            mapView.showsUserLocation = true
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+    let regionRadius: CLLocationDistance = 5000
+    func centerMapOnLocation(location: CLLocation) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkLocationAuthorizationStatus()
+    }
     /*
     // MARK: - Navigation
 
@@ -140,3 +186,34 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
         }
     }
 }
+extension MapGuideVC {
+    // 1
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        // 2
+        guard let annotation = annotation as? Points else { return nil }
+        // 3
+        let identifier = "marker"
+        var view: MKMarkerAnnotationView
+        // 4
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+            as? MKMarkerAnnotationView {
+            dequeuedView.annotation = annotation
+            view = dequeuedView
+        } else {
+            // 5
+            view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view.canShowCallout = true
+            view.calloutOffset = CGPoint(x: -5, y: 5)
+            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        return view
+    }
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
+                 calloutAccessoryControlTapped control: UIControl) {
+        let location = view.annotation as! Points
+        let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+        location.mapItem().openInMaps(launchOptions: launchOptions)
+    }
+}
+
+
