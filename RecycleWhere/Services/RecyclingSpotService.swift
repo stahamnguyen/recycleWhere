@@ -21,7 +21,8 @@ class RecyclingSpotService {
     
     // MARK: Public methods
     //Fetches the nearest recycling spots. Server returns XML data
-    func fetchRecyclingSpots(_ userLatitude: Float, _ userLongitude: Float) -> Data {
+    func fetchRecyclingSpots(_ userLatitude: Float, _ userLongitude: Float,
+                             completionHandler: @escaping (_ serverResponse: Data) -> Void){
         
         let requestUrl:NSURL = self.constructRequestNSURL(userLatitude, userLongitude)
         
@@ -30,15 +31,18 @@ class RecyclingSpotService {
         //Async task begins here
         let task = URLSession.shared.dataTask(with: requestUrl as URL) { (data, response, error) in
             
+            print("INSIDE ASYNC")
+            
             guard let data = data else {
                 print("Error processing data from server")
                 return
             }
             serverResponse = data
+            
+            print("Passing to comphandler")
+            completionHandler(data)
         }
         task.resume()
-        
-        return (serverResponse ?? nil)!
     }
     
     // MARK: Private methods

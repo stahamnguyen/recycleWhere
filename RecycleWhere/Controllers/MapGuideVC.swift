@@ -33,11 +33,14 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         
         let recyclingSpots = RecyclingSpotService()
         
-        let dataFromApi = recyclingSpots.fetchRecyclingSpots(60.2208903, 24.8027918)
-        
-        parseServerXmlResponse(apiData: dataFromApi)
-        
-        fetchRecyclingSpotFromCoreData()
+        recyclingSpots.fetchRecyclingSpots(60.2208903, 24.8027918, completionHandler: { (serverResponse) in
+            
+            //print(serverResponse)
+            self.parseServerXmlResponse(apiData: serverResponse)
+            
+            //self.fetchRecyclingSpotFromCoreData()
+                                                                
+        })
         
         initlocation = CLLocation(latitude: 60.2208903, longitude: 24.8027918)
         
@@ -137,8 +140,9 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         print("Ending " + elementName)
         
         if(elementName == "markers") {
+            print("Reading completed")
             //Save context when all of the recycling spots have been read
-            try? AppDelegate.viewContext.save()
+            //try? AppDelegate.viewContext.save()
         }
     }
     
@@ -152,36 +156,45 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
     //Creates a new recycling spot, given the list of attributes required for it
     private func createRecyclingSpot(_ attributeDict: [String: String]) {
         
-        let recyclingSpot = RecyclingSpot(context: AppDelegate.viewContext)
-        
-        for attribute in attributeDict {
+        DispatchQueue.main.async {
+            let recyclingSpot = RecyclingSpot(context: AppDelegate.viewContext)
             
-            switch attribute.key {
+            for attribute in attributeDict {
                 
-            case "paikka_id" :
-                recyclingSpot.spot_id = attribute.value
-                break
-            case "lat" :
-                recyclingSpot.lat = Float(attribute.value)!
-                break
-            case "lng" :
-                recyclingSpot.lng = Float(attribute.value)!
-                break
-            case "nimi" :
-                recyclingSpot.name = attribute.value
-                break
-            case "laji_id" :
-                recyclingSpot.material_id = attribute.value
-                break
-            case "aukiolo" :
-                recyclingSpot.openingHours = attribute.value
-                break
-            case "yhteys" :
-                recyclingSpot.contactInfo = attribute.value
-                break
-                
-            default:
-                print("Unnecessary attribute " + attribute.key)
+                switch attribute.key {
+                    
+                case "paikka_id" :
+                    print(attribute.value)
+                    recyclingSpot.spot_id = String(attribute.value)
+                    break
+                case "lat" :
+                    print(attribute.value)
+                    recyclingSpot.lat = Float(attribute.value)!
+                    break
+                case "lng" :
+                    print(attribute.value)
+                    recyclingSpot.lng = Float(attribute.value)!
+                    break
+                case "nimi" :
+                    print(attribute.value)
+                    recyclingSpot.name = String(attribute.value)
+                    break
+                case "laji_id" :
+                    print(attribute.value)
+                    recyclingSpot.material_id = String(attribute.value)
+                    break
+                case "aukiolo" :
+                    print(attribute.value)
+                    recyclingSpot.openingHours = String(attribute.value)
+                    break
+                case "yhteys" :
+                    print(attribute.value)
+                    recyclingSpot.contactInfo = String(attribute.value)
+                    break
+                    
+                default:
+                    print("Unnecessary attribute " + attribute.key)
+                }
             }
         }
     }

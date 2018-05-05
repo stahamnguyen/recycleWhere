@@ -10,6 +10,6 @@
         <attribute name="spot_id" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="RecyclingSpot" positionX="-63" positionY="-18" width="128" height="150"/>
+        <element name="RecyclingSpot" positionX="-63" positionY="-18" width="128" height="148"/>
     </elements>
 </model>
