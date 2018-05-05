@@ -27,6 +27,7 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
         //After that utilize the xml parsing functions with the Data received from API
         
         setupMapView()
+        createCurrentLocationButton()
         
         let recyclingSpots = RecyclingSpotService()
         
@@ -44,6 +45,21 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
         let horizontalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(0)-[mapView]-(0)-|", options: .alignAllCenterX, metrics: nil, views: views)
         NSLayoutConstraint.activate(verticalConstraint)
         NSLayoutConstraint.activate(horizontalConstraint)
+    }
+    
+    func createCurrentLocationButton() {
+        let currentLocationButton = MKUserTrackingButton(mapView: self.mapView)
+        currentLocationButton.frame = CGRect(x: SCREEN_WIDTH - 60, y: SCREEN_HEIGHT - 60, width: 40, height: 40)
+        currentLocationButton.tintColor = LIGHT_BLUE
+        currentLocationButton.backgroundColor = WHITE
+        currentLocationButton.layer.cornerRadius = 4
+        
+        currentLocationButton.layer.shadowColor = BLACK.cgColor
+        currentLocationButton.layer.shadowOpacity = 0.3
+        currentLocationButton.layer.shadowRadius = 4
+        currentLocationButton.layer.shadowOffset = CGSize(width: 0, height: 0)
+        
+        mapView.addSubview(currentLocationButton)
     }
     
 
