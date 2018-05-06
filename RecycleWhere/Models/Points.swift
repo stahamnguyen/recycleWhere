@@ -19,10 +19,10 @@ class Points: NSObject, MKAnnotation {
     init?(data: RecyclingSpot) {
         // 1
         self.title = data.name
-        self.locationName = data.openingHours!
-        self.aukiolo = data.openingHours!
+        self.locationName = data.openingHours ?? ""
+        self.aukiolo = data.openingHours ?? ""
         // 2
-        self.coordinate = CLLocationCoordinate2D(latitude: Double(data.lat as String!)!, longitude: Double(data.lng as String!)!)
+        self.coordinate = CLLocationCoordinate2D(latitude: Double((data.lat ?? "0.0"))!, longitude: Double((data.lng ?? "0.0"))!)
         
     }
     var subtitle: String? {

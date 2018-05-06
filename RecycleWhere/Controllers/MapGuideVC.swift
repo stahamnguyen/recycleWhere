@@ -35,11 +35,12 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         
         recyclingSpots.fetchRecyclingSpots(60.169583, 24.933444, completionHandler: { (serverResponse) in
             
-            //print(serverResponse)
-            self.parseServerXmlResponse(apiData: serverResponse)
-            print("Parsing completed, fetching...")
-            self.fetchRecyclingSpotFromCoreData()
-            
+            DispatchQueue.main.async {
+                //print(serverResponse)
+                self.parseServerXmlResponse(apiData: serverResponse)
+                print("Parsing completed, fetching...")
+                self.fetchRecyclingSpotFromCoreData()
+            }
         })
         
         
@@ -129,10 +130,6 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
     func parseServerXmlResponse(apiData: Data) {
         let parser = XMLParser(data: apiData)
         
-        /*guard let xmlParser = parser else {
-         fatalError("Couldn't initialize parser !")
-         } */
-        
         parser.delegate = self
         parser.parse()
     }
@@ -185,7 +182,6 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
     //Creates a new recycling spot, given the list of attributes required for it
     private func createRecyclingSpot(_ attributeDict: [String: String]) {
         
-        //DispatchQueue.main.async {
         let recyclingSpot = RecyclingSpot(context: AppDelegate.viewContext)
         
         for attribute in attributeDict {
@@ -225,7 +221,6 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
                 print("Unnecessary attribute " + attribute.key)
             }
         }
-        //}
     }
 }
 
