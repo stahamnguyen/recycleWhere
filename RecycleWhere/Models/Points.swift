@@ -2,6 +2,7 @@ import Foundation
 import MapKit
 import Contacts
 import CoreData
+
 class Points: NSObject, MKAnnotation {
     let title: String?
     let locationName: String
@@ -19,11 +20,11 @@ class Points: NSObject, MKAnnotation {
     }
     init?(data: RecyclingSpot) {
         // 1
+        self.material = data.material_id ?? ""
         self.title = data.name
-        self.locationName = data.spot_id!
-        self.material = data.material_id!
+        self.locationName = data.openingHours ?? ""
         // 2
-        self.coordinate = CLLocationCoordinate2D(latitude: Double(data.lat ?? "0.0")!, longitude: Double(data.lng ?? "0.0")!)
+        self.coordinate = CLLocationCoordinate2D(latitude: Double((data.lat ?? "0.0"))!, longitude: Double((data.lng ?? "0.0"))!)
         
     }
     var subtitle: String? {

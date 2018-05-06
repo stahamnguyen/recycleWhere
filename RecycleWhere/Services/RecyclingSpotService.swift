@@ -26,8 +26,6 @@ class RecyclingSpotService {
         
         let requestUrl:NSURL = self.constructRequestNSURL(userLatitude, userLongitude)
         
-        var serverResponse: Data?
-        
         //Async task begins here
         let task = URLSession.shared.dataTask(with: requestUrl as URL) { (data, response, error) in
             
@@ -37,7 +35,6 @@ class RecyclingSpotService {
                 print("Error processing data from server")
                 return
             }
-            serverResponse = data
             
             print("Passing to comphandler")
             completionHandler(data)

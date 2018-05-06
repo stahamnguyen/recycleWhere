@@ -14,10 +14,11 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
     
     let mapView = MKMapView()
     var controller = NSFetchedResultsController<RecyclingSpot>()
-    var previousViewController: UIViewController?
+    let recyclingSpots = RecyclingSpotService()
     var initlocation: CLLocation?
     let locationManager = CLLocationManager()
     var recpoints: [Points] = []
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "backShadow")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "backShadow")
@@ -30,16 +31,17 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         //After that utilize the xml parsing functions with the Data received from API
         
         setupMapView()
+        createCurrentLocationButton()
+        
         mapView.delegate = self
-        let recyclingSpots = RecyclingSpotService()
         
         recyclingSpots.fetchRecyclingSpots(60.2208903, 24.8027918, completionHandler: { (serverResponse) in
             
-            //print(serverResponse)
-            self.parseServerXmlResponse(apiData: serverResponse)
-            print("Parsing completed, fetching...")
-            self.fetchRecyclingSpotFromCoreData()
-            
+            DispatchQueue.main.async {
+                self.parseServerXmlResponse(apiData: serverResponse)
+                print("Parsing completed, fetching...")
+                self.fetchRecyclingSpotFromCoreData()
+            }
         })
         
         initlocation = CLLocation(latitude: 60.2208903, longitude: 24.8027918)
@@ -59,7 +61,22 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         NSLayoutConstraint.activate(verticalConstraint)
         NSLayoutConstraint.activate(horizontalConstraint)
     }
-    //
+    
+    func createCurrentLocationButton() {
+        let currentLocationButton = MKUserTrackingButton(mapView: self.mapView)
+        currentLocationButton.frame = CGRect(x: SCREEN_WIDTH - 60, y: SCREEN_HEIGHT - 60, width: 40, height: 40)
+        currentLocationButton.tintColor = LIGHT_BLUE
+        currentLocationButton.backgroundColor = WHITE
+        currentLocationButton.layer.cornerRadius = 4
+        
+        currentLocationButton.layer.shadowColor = BLACK.cgColor
+        currentLocationButton.layer.shadowOpacity = 0.3
+        currentLocationButton.layer.shadowRadius = 4
+        currentLocationButton.layer.shadowOffset = CGSize(width: 0, height: 0)
+        
+        mapView.addSubview(currentLocationButton)
+    }
+    
     //fetch recycling spot
     func fetchRecyclingSpotFromCoreData() {
         let fetchRequest: NSFetchRequest<RecyclingSpot> = RecyclingSpot.fetchRequest()
@@ -70,6 +87,18 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         self.controller.delegate = self
         do {
             try self.controller.performFetch()
+            
+            let data = self.controller.fetchedObjects
+            for miniData in data! {
+                recpoints.append(Points(data: miniData)!)
+                print(miniData)
+            }
+            
+            initlocation = CLLocation(latitude: 60.169583, longitude: 24.933444)
+            
+            centerMapOnLocation(location: initlocation!)
+            
+            mapView.addAnnotations(recpoints)
         } catch {
             let error = error as NSError
             print("\(error)")
@@ -90,6 +119,7 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         checkLocationAuthorizationStatus()
@@ -121,11 +151,6 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
     //Parsing function requires Data object from the RecyclingSpotService function
     func parseServerXmlResponse(apiData: Data) {
         let parser = XMLParser(data: apiData)
-        
-        /*guard let xmlParser = parser else {
-            fatalError("Couldn't initialize parser !")
-        } */
-        
         parser.delegate = self
         parser.parse()
     }
@@ -178,43 +203,40 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
     
     //Creates a new recycling spot, given the list of attributes required for it
     private func createRecyclingSpot(_ attributeDict: [String: String]) {
+        let recyclingSpot = RecyclingSpot(context: AppDelegate.viewContext)
         
-        //DispatchQueue.main.async {
-            let recyclingSpot = RecyclingSpot(context: AppDelegate.viewContext)
-            
-            for attribute in attributeDict {
-                switch attribute.key {
-                    
-                case "paikka_id" :
-                    print(attribute.value)
-                    recyclingSpot.spot_id = String(attribute.value)
-                    break
-                case "lat" :
-                    print(attribute.value)
-                    recyclingSpot.lat = String(attribute.value)
-                    break
-                case "lng" :
-                    print(attribute.value)
-                    recyclingSpot.lng = String(attribute.value)
-                    break
-                case "nimi" :
-                    print(attribute.value)
-                    recyclingSpot.name = String(attribute.value)
-                    break
-                case "laji_id" :
-                    print(attribute.value)
-                    recyclingSpot.material_id = String(attribute.value)
-                    break
-                case "aukiolo" :
-                    print(attribute.value)
-                    recyclingSpot.openingHours = String(attribute.value)
-                    break
-                    
-                default:
-                    print("Unnecessary attribute " + attribute.key)
-                }
+        for attribute in attributeDict {
+            switch attribute.key {
+                
+            case "paikka_id" :
+                print(attribute.value)
+                recyclingSpot.spot_id = String(attribute.value)
+                break
+            case "lat" :
+                print(attribute.value)
+                recyclingSpot.lat = String(attribute.value)
+                break
+            case "lng" :
+                print(attribute.value)
+                recyclingSpot.lng = String(attribute.value)
+                break
+            case "nimi" :
+                print(attribute.value)
+                recyclingSpot.name = String(attribute.value)
+                break
+            case "laji_id" :
+                print(attribute.value)
+                recyclingSpot.material_id = String(attribute.value)
+                break
+            case "aukiolo" :
+                print(attribute.value)
+                recyclingSpot.openingHours = String(attribute.value)
+                break
+                
+            default:
+                print("Unnecessary attribute " + attribute.key)
             }
-        //}
+        }
     }
 }
 
