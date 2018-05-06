@@ -5,13 +5,14 @@ import CoreData
 class Points: NSObject, MKAnnotation {
     let title: String?
     let locationName: String
-    let aukiolo: String
+    
+    let material: String
     let coordinate: CLLocationCoordinate2D
     
-    init(title: String, locationName: String, aukiolo: String, coordinate: CLLocationCoordinate2D) {
+    init(title: String, locationName: String, material: String, coordinate: CLLocationCoordinate2D) {
         self.title = title
         self.locationName = locationName
-        self.aukiolo = aukiolo
+        self.material = material
         self.coordinate = coordinate
         
         super.init()
@@ -19,10 +20,10 @@ class Points: NSObject, MKAnnotation {
     init?(data: RecyclingSpot) {
         // 1
         self.title = data.name
-        self.locationName = data.openingHours!
-        self.aukiolo = data.openingHours!
+        self.locationName = data.spot_id!
+        self.material = data.material_id!
         // 2
-        self.coordinate = CLLocationCoordinate2D(latitude: Double(data.lat as String!)!, longitude: Double(data.lng as String!)!)
+        self.coordinate = CLLocationCoordinate2D(latitude: Double(data.lat ?? "0.0")!, longitude: Double(data.lng ?? "0.0")!)
         
     }
     var subtitle: String? {

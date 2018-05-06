@@ -33,7 +33,7 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         mapView.delegate = self
         let recyclingSpots = RecyclingSpotService()
         
-        recyclingSpots.fetchRecyclingSpots(60.169583, 24.933444, completionHandler: { (serverResponse) in
+        recyclingSpots.fetchRecyclingSpots(60.2208903, 24.8027918, completionHandler: { (serverResponse) in
             
             //print(serverResponse)
             self.parseServerXmlResponse(apiData: serverResponse)
@@ -42,7 +42,11 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
             
         })
         
+        initlocation = CLLocation(latitude: 60.2208903, longitude: 24.8027918)
         
+        centerMapOnLocation(location: initlocation!)
+        
+        mapView.addAnnotations(recpoints)
     }
     
     func setupMapView() {
@@ -58,7 +62,6 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
     //
     //fetch recycling spot
     func fetchRecyclingSpotFromCoreData() {
-        print("start fetch from core data")
         let fetchRequest: NSFetchRequest<RecyclingSpot> = RecyclingSpot.fetchRequest()
         let descriptor = NSSortDescriptor(key:"name", ascending: true)
         fetchRequest.sortDescriptors = [descriptor]
@@ -67,22 +70,10 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         self.controller.delegate = self
         do {
             try self.controller.performFetch()
-            print("done perform fetch from core data")
-            let data = self.controller.fetchedObjects
-            for miniData in data! {
-                recpoints.append(Points(data: miniData)!)
-                print(miniData)
-            }
-            initlocation = CLLocation(latitude: 60.169583, longitude: 24.933444)
-            
-            centerMapOnLocation(location: initlocation!)
-            
-            mapView.addAnnotations(recpoints)
         } catch {
             let error = error as NSError
             print("\(error)")
         }
-        
     }
     
     func checkLocationAuthorizationStatus() {
@@ -92,7 +83,9 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
             locationManager.requestWhenInUseAuthorization()
         }
     }
-    let regionRadius: CLLocationDistance = 1000
+    
+    let regionRadius: CLLocationDistance = 5000
+    
     func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
@@ -130,15 +123,16 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         let parser = XMLParser(data: apiData)
         
         /*guard let xmlParser = parser else {
-         fatalError("Couldn't initialize parser !")
-         } */
+            fatalError("Couldn't initialize parser !")
+        } */
         
         parser.delegate = self
         parser.parse()
     }
     
     let APIBaseUrl = "http://kierratys.info/2.0/genxml.php"
-    let searchRadius = 10
+    
+    let searchRadius = 4
     
     //Constructs the request URL when given latitude and longitude of the user
     private func constructRequestURL(_ lat: Float,_ lng: Float) -> URL{
@@ -186,45 +180,40 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
     private func createRecyclingSpot(_ attributeDict: [String: String]) {
         
         //DispatchQueue.main.async {
-        let recyclingSpot = RecyclingSpot(context: AppDelegate.viewContext)
-        
-        for attribute in attributeDict {
+            let recyclingSpot = RecyclingSpot(context: AppDelegate.viewContext)
             
-            switch attribute.key {
-                
-            case "paikka_id" :
-                print(attribute.value)
-                recyclingSpot.spot_id = String(attribute.value)
-                break
-            case "lat" :
-                print(attribute.value)
-                recyclingSpot.lat = String(attribute.value)
-                break
-            case "lng" :
-                print(attribute.value)
-                recyclingSpot.lng = String(attribute.value)
-                break
-            case "nimi" :
-                print(attribute.value)
-                recyclingSpot.name = String(attribute.value)
-                break
-            case "laji_id" :
-                print(attribute.value)
-                recyclingSpot.material_id = String(attribute.value)
-                break
-            case "aukiolo" :
-                print(attribute.value)
-                recyclingSpot.openingHours = String(attribute.value)
-                break
-            case "yhteys" :
-                print(attribute.value)
-                recyclingSpot.contactInfo = String(attribute.value)
-                break
-                
-            default:
-                print("Unnecessary attribute " + attribute.key)
+            for attribute in attributeDict {
+                switch attribute.key {
+                    
+                case "paikka_id" :
+                    print(attribute.value)
+                    recyclingSpot.spot_id = String(attribute.value)
+                    break
+                case "lat" :
+                    print(attribute.value)
+                    recyclingSpot.lat = String(attribute.value)
+                    break
+                case "lng" :
+                    print(attribute.value)
+                    recyclingSpot.lng = String(attribute.value)
+                    break
+                case "nimi" :
+                    print(attribute.value)
+                    recyclingSpot.name = String(attribute.value)
+                    break
+                case "laji_id" :
+                    print(attribute.value)
+                    recyclingSpot.material_id = String(attribute.value)
+                    break
+                case "aukiolo" :
+                    print(attribute.value)
+                    recyclingSpot.openingHours = String(attribute.value)
+                    break
+                    
+                default:
+                    print("Unnecessary attribute " + attribute.key)
+                }
             }
-        }
         //}
     }
 }
@@ -233,7 +222,6 @@ extension MapGuideVC {
     // 1
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         // 2
-        
         guard let annotation = annotation as? Points else { return nil }
         // 3
         let identifier = "marker"
@@ -254,12 +242,8 @@ extension MapGuideVC {
     }
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
                  calloutAccessoryControlTapped control: UIControl) {
-        print("view annotation")
         let location = view.annotation as! Points
         let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
         location.mapItem().openInMaps(launchOptions: launchOptions)
     }
 }
-
-
-

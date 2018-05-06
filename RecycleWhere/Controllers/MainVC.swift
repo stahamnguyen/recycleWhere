@@ -59,7 +59,7 @@ class MainVC: UIViewController, XMLParserDelegate, UIImagePickerControllerDelega
         view.addSubview(self.identifyButton!)
         
         self.identifyButton?.translatesAutoresizingMaskIntoConstraints = false;
-        let views = ["logo": self.logo!, "button": self.identifyButton!]
+        let views = ["logo": self.logo!, "button": self.identifyButton!] as [String : Any]
         self.identifyButton?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         let verticalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "V:[logo]-(50)-[button]", options: .alignAllCenterX, metrics: nil, views: views)
         NSLayoutConstraint.activate(verticalConstraint)

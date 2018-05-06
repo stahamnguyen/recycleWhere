@@ -88,7 +88,7 @@ class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         view.addSubview(categoryPickerView)
         
         self.categoryPickerView.translatesAutoresizingMaskIntoConstraints = false;
-        let views = ["pickerView": self.categoryPickerView, "imageView": self.imageView]
+        let views = ["pickerView": self.categoryPickerView, "imageView": self.imageView] as [String : Any]
         self.categoryPickerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         let verticalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "V:|-(>=20)-[imageView]-(50)-[pickerView]", options: .alignAllCenterX, metrics: nil, views: views)
         NSLayoutConstraint.activate(verticalConstraint)
@@ -103,7 +103,7 @@ class CategoryVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         let distanceToScreenHeight = SCREEN_WIDTH / 2 - 25
         
         self.button.translatesAutoresizingMaskIntoConstraints = false;
-        let views = ["pickerView": self.categoryPickerView, "button": self.button]
+        let views = ["pickerView": self.categoryPickerView, "button": self.button] as [String : Any]
         self.button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         let verticalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "V:[pickerView]-(>=20)-[button]-(20)-|", options: .alignAllCenterX, metrics: nil, views: views)
         let horizontalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(\(distanceToScreenHeight))-[button]-(\(distanceToScreenHeight))-|", options: .alignAllCenterX, metrics: nil, views: views)
