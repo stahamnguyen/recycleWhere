@@ -37,8 +37,8 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
             
             //print(serverResponse)
             self.parseServerXmlResponse(apiData: serverResponse)
-            
-            //self.fetchRecyclingSpotFromCoreData()
+            print("Parsing completed, fetching...")
+            self.fetchRecyclingSpotFromCoreData()
                                                                 
         })
         
@@ -123,9 +123,29 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
     //Parsing function requires Data object from the RecyclingSpotService function
     func parseServerXmlResponse(apiData: Data) {
         let parser = XMLParser(data: apiData)
+        
+        /*guard let xmlParser = parser else {
+            fatalError("Couldn't initialize parser !")
+        } */
+        
         parser.delegate = self
-        //Initiates parsing of the data
         parser.parse()
+    }
+    
+    let APIBaseUrl = "http://kierratys.info/2.0/genxml.php"
+    let searchRadius = 4
+    
+    //Constructs the request URL when given latitude and longitude of the user
+    private func constructRequestURL(_ lat: Float,_ lng: Float) -> URL{
+        
+        var url:String = APIBaseUrl
+        url.append("?lat=" + String(lat))
+        url.append("&lng=" + String(lng))
+        url.append("&radius=" + String(searchRadius))
+        
+        print(url)
+        
+        return URL(string: url)!
     }
     
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
@@ -140,9 +160,13 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
         print("Ending " + elementName)
         
         if(elementName == "markers") {
-            print("Reading completed")
+            print("XML parsing completed, trying to save context")
             //Save context when all of the recycling spots have been read
-            //try? AppDelegate.viewContext.save()
+            do {
+                try context.save()
+            } catch {
+                fatalError("Couldnt save context \(error)")
+            }
         }
     }
     
@@ -156,7 +180,7 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
     //Creates a new recycling spot, given the list of attributes required for it
     private func createRecyclingSpot(_ attributeDict: [String: String]) {
         
-        DispatchQueue.main.async {
+        //DispatchQueue.main.async {
             let recyclingSpot = RecyclingSpot(context: AppDelegate.viewContext)
             
             for attribute in attributeDict {
@@ -169,11 +193,11 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
                     break
                 case "lat" :
                     print(attribute.value)
-                    recyclingSpot.lat = Float(attribute.value)!
+                    recyclingSpot.lat = String(attribute.value)
                     break
                 case "lng" :
                     print(attribute.value)
-                    recyclingSpot.lng = Float(attribute.value)!
+                    recyclingSpot.lng = String(attribute.value)
                     break
                 case "nimi" :
                     print(attribute.value)
@@ -196,9 +220,10 @@ class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControlle
                     print("Unnecessary attribute " + attribute.key)
                 }
             }
-        }
+        //}
     }
 }
+
 extension MapGuideVC {
     // 1
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
