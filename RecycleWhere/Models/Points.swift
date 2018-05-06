@@ -1,38 +1,36 @@
 import Foundation
 import MapKit
 import Contacts
+import CoreData
 class Points: NSObject, MKAnnotation {
     let title: String?
     let locationName: String
-    let discipline: String
+    let aukiolo: String
     let coordinate: CLLocationCoordinate2D
     
-    init(title: String, locationName: String, discipline: String, coordinate: CLLocationCoordinate2D) {
+    init(title: String, locationName: String, aukiolo: String, coordinate: CLLocationCoordinate2D) {
         self.title = title
         self.locationName = locationName
-        self.discipline = discipline
+        self.aukiolo = aukiolo
         self.coordinate = coordinate
         
         super.init()
     }
-    init?(json: [Any]) {
+    init?(data: RecyclingSpot) {
         // 1
-        self.title = json[16] as? String ?? "No Title"
-        self.locationName = json[12] as! String
-        self.discipline = json[15] as! String
+        self.title = data.name
+        self.locationName = data.openingHours!
+        self.aukiolo = data.openingHours!
         // 2
-        if let latitude = Double(json[18] as! String),
-            let longitude = Double(json[19] as! String) {
-            self.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        } else {
-            self.coordinate = CLLocationCoordinate2D()
-        }
+        self.coordinate = CLLocationCoordinate2D(latitude: Double(data.lat as String!)!, longitude: Double(data.lng as String!)!)
+        
     }
     var subtitle: String? {
         return locationName
     }
     // Annotation right callout accessory opens this mapItem in Maps app
     func mapItem() -> MKMapItem {
+        print("draw map item")
         let addressDict = [CNPostalAddressStreetKey: subtitle!]
         let placemark = MKPlacemark(coordinate: coordinate, addressDictionary: addressDict)
         let mapItem = MKMapItem(placemark: placemark)

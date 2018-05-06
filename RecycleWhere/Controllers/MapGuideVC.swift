@@ -8,30 +8,41 @@
 
 import UIKit
 import MapKit
+import CoreData
 
-class MapGuideVC: UIViewController, XMLParserDelegate {
+class MapGuideVC: UIViewController, XMLParserDelegate, NSFetchedResultsControllerDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
     
     let mapView = MKMapView()
-    
+    var controller = NSFetchedResultsController<RecyclingSpot>()
     var previousViewController: UIViewController?
-    
+    var initlocation: CLLocation?
+    let locationManager = CLLocationManager()
+    var recpoints: [Points] = []
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "backShadow")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "backShadow")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         //Call RecyclingSpotService here maybe ?
         //After that utilize the xml parsing functions with the Data received from API
         
         setupMapView()
-        createCurrentLocationButton()
-        
+        mapView.delegate = self
         let recyclingSpots = RecyclingSpotService()
-
-        recyclingSpots.fetchRecyclingSpots(userLatitude: 20.006, userLongitude: 304.05, completionHandler: parseServerXmlResponse(apiData:))
+        
+        recyclingSpots.fetchRecyclingSpots(60.169583, 24.933444, completionHandler: { (serverResponse) in
+            
+            //print(serverResponse)
+            self.parseServerXmlResponse(apiData: serverResponse)
+            print("Parsing completed, fetching...")
+            self.fetchRecyclingSpotFromCoreData()
+            
+        })
+        
+        
     }
     
     func setupMapView() {
@@ -44,32 +55,61 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
         NSLayoutConstraint.activate(verticalConstraint)
         NSLayoutConstraint.activate(horizontalConstraint)
     }
-    
-    func createCurrentLocationButton() {
-        let currentLocationButton = MKUserTrackingButton(mapView: self.mapView)
-        currentLocationButton.frame = CGRect(x: SCREEN_WIDTH - 60, y: SCREEN_HEIGHT - 60, width: 40, height: 40)
-        currentLocationButton.tintColor = LIGHT_BLUE
-        currentLocationButton.backgroundColor = WHITE
-        currentLocationButton.layer.cornerRadius = 4
+    //
+    //fetch recycling spot
+    func fetchRecyclingSpotFromCoreData() {
+        print("start fetch from core data")
+        let fetchRequest: NSFetchRequest<RecyclingSpot> = RecyclingSpot.fetchRequest()
+        let descriptor = NSSortDescriptor(key:"name", ascending: true)
+        fetchRequest.sortDescriptors = [descriptor]
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        self.controller = controller
+        self.controller.delegate = self
+        do {
+            try self.controller.performFetch()
+            print("done perform fetch from core data")
+            let data = self.controller.fetchedObjects
+            for miniData in data! {
+                recpoints.append(Points(data: miniData)!)
+                print(miniData)
+            }
+            initlocation = CLLocation(latitude: 60.169583, longitude: 24.933444)
+            
+            centerMapOnLocation(location: initlocation!)
+            
+            mapView.addAnnotations(recpoints)
+        } catch {
+            let error = error as NSError
+            print("\(error)")
+        }
         
-        currentLocationButton.layer.shadowColor = BLACK.cgColor
-        currentLocationButton.layer.shadowOpacity = 0.3
-        currentLocationButton.layer.shadowRadius = 4
-        currentLocationButton.layer.shadowOffset = CGSize(width: 0, height: 0)
-        
-        mapView.addSubview(currentLocationButton)
     }
     
-
+    func checkLocationAuthorizationStatus() {
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            mapView.showsUserLocation = true
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+    let regionRadius: CLLocationDistance = 1000
+    func centerMapOnLocation(location: CLLocation) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkLocationAuthorizationStatus()
+    }
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
     
     // MARK: - XML parsing methods
     
@@ -88,9 +128,29 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
     //Parsing function requires Data object from the RecyclingSpotService function
     func parseServerXmlResponse(apiData: Data) {
         let parser = XMLParser(data: apiData)
+        
+        /*guard let xmlParser = parser else {
+         fatalError("Couldn't initialize parser !")
+         } */
+        
         parser.delegate = self
-        //Initiates parsing of the data
         parser.parse()
+    }
+    
+    let APIBaseUrl = "http://kierratys.info/2.0/genxml.php"
+    let searchRadius = 10
+    
+    //Constructs the request URL when given latitude and longitude of the user
+    private func constructRequestURL(_ lat: Float,_ lng: Float) -> URL{
+        
+        var url:String = APIBaseUrl
+        url.append("?lat=" + String(lat))
+        url.append("&lng=" + String(lng))
+        url.append("&radius=" + String(searchRadius))
+        
+        print(url)
+        
+        return URL(string: url)!
     }
     
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
@@ -105,8 +165,13 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
         print("Ending " + elementName)
         
         if(elementName == "markers") {
+            print("XML parsing completed, trying to save context")
             //Save context when all of the recycling spots have been read
-            try? AppDelegate.viewContext.save()
+            do {
+                try context.save()
+            } catch {
+                fatalError("Couldnt save context \(error)")
+            }
         }
     }
     
@@ -120,6 +185,7 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
     //Creates a new recycling spot, given the list of attributes required for it
     private func createRecyclingSpot(_ attributeDict: [String: String]) {
         
+        //DispatchQueue.main.async {
         let recyclingSpot = RecyclingSpot(context: AppDelegate.viewContext)
         
         for attribute in attributeDict {
@@ -127,30 +193,73 @@ class MapGuideVC: UIViewController, XMLParserDelegate {
             switch attribute.key {
                 
             case "paikka_id" :
-                recyclingSpot.spot_id = attribute.value
+                print(attribute.value)
+                recyclingSpot.spot_id = String(attribute.value)
                 break
             case "lat" :
-                recyclingSpot.lat = Float(attribute.value)!
+                print(attribute.value)
+                recyclingSpot.lat = String(attribute.value)
                 break
             case "lng" :
-                recyclingSpot.lng = Float(attribute.value)!
+                print(attribute.value)
+                recyclingSpot.lng = String(attribute.value)
                 break
             case "nimi" :
-                recyclingSpot.name = attribute.value
+                print(attribute.value)
+                recyclingSpot.name = String(attribute.value)
                 break
             case "laji_id" :
-                recyclingSpot.material_id = attribute.value
+                print(attribute.value)
+                recyclingSpot.material_id = String(attribute.value)
                 break
             case "aukiolo" :
-                recyclingSpot.openingHours = attribute.value
+                print(attribute.value)
+                recyclingSpot.openingHours = String(attribute.value)
                 break
             case "yhteys" :
-                recyclingSpot.contactInfo = attribute.value
+                print(attribute.value)
+                recyclingSpot.contactInfo = String(attribute.value)
                 break
                 
             default:
                 print("Unnecessary attribute " + attribute.key)
             }
         }
+        //}
     }
 }
+
+extension MapGuideVC {
+    // 1
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        // 2
+        
+        guard let annotation = annotation as? Points else { return nil }
+        // 3
+        let identifier = "marker"
+        var view: MKMarkerAnnotationView
+        // 4
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+            as? MKMarkerAnnotationView {
+            dequeuedView.annotation = annotation
+            view = dequeuedView
+        } else {
+            // 5
+            view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view.canShowCallout = true
+            view.calloutOffset = CGPoint(x: -5, y: 5)
+            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        return view
+    }
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
+                 calloutAccessoryControlTapped control: UIControl) {
+        print("view annotation")
+        let location = view.annotation as! Points
+        let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+        location.mapItem().openInMaps(launchOptions: launchOptions)
+    }
+}
+
+
+

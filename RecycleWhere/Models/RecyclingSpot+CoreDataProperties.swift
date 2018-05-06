@@ -17,8 +17,8 @@ extension RecyclingSpot {
         return NSFetchRequest<RecyclingSpot>(entityName: "RecyclingSpot")
     }
 
-    @NSManaged public var lat: Float
-    @NSManaged public var lng: Float
+    @NSManaged public var lat: String?
+    @NSManaged public var lng: String?
     @NSManaged public var material_id: String?
     @NSManaged public var name: String?
     @NSManaged public var spot_id: String?
